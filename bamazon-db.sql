@@ -1,13 +1,15 @@
+DROP DATABASE IF EXISTS bamazon_db;
+
 CREATE DATABASE bamazon_db;
 
 USE bamazon_db;
 
 CREATE TABLE products (
 	item_id INTEGER(100) NOT NULL,
-    product_name VARCHAR(100) NULL,
-    department_name VARCHAR(50) NULL,
-    price INTEGER(100) NOT NULL,
-    stock_quantity INTEGER(100)
+    product_name VARCHAR(100) NOT NULL,
+    department_name VARCHAR(50) NOT NULL,
+    price DECIMAL(6, 2) NOT NULL,
+    stock_quantity INTEGER(100) NOT NULL
 );
 
 INSERT INTO bamazon_db.products 
@@ -28,7 +30,7 @@ INSERT INTO bamazon_db.products
     
 INSERT INTO bamazon_db.products 
 	(item_id, product_name, department_name, price, stock_quantity)
-    VALUES (173, "Canon EOS 5D Mark IV", "Electronics", 3500.00, 150); 
+    VALUES (173, "Canon EOS 5D Mark IV", "Electronics", 3499.99, 150); 
     
 INSERT INTO bamazon_db.products 
 	(item_id, product_name, department_name, price, stock_quantity)
