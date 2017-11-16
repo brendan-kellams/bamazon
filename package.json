@@ -1,0 +1,19 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "vitural amazon store using mySQL",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brendan-kellams/bamazon.git"
+  },
+  "author": "Brendan Kellams",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brendan-kellams/bamazon/issues"
+  },
+  "homepage": "https://github.com/brendan-kellams/bamazon#readme"
+}
