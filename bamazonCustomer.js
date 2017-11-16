@@ -2,7 +2,7 @@ var inquirer = require('inquirer');
 var mySQL = require('mysql');
 
 var connection = mySQL.createConnection({
-    host: "LocalTacoShop",
+    host: "127.0.0.1",
     port: 3306,
     user: "root",
     password:"",
