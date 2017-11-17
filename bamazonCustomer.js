@@ -42,24 +42,10 @@ function buy(result) {
             type: "input",
             name: "id",
             message: "Please enter the item number you would like to purchase:",
-            // validate: function (value) {
-            //     if (isNaN(value) == false && parseInt(value) <= result.length && parseInt(value) > 0) {
-            //         return true;
-            //     } else {
-            //         return false;
-            //     }
-            // }
         }, {
             type: "input",
             name: "quantity",
             message: "How many would you like to buy? ",
-            validate: function (value) {
-                if (isNaN(value)) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
         }
     ]).then(function (answers) {
         var item = (answers.id) - 1;
