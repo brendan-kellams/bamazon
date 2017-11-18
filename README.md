@@ -62,5 +62,5 @@ This project had more challenging features offered but this application in its c
 #### License
 ***
 
-Copyright 2016 UCSD Coding Bootcamp - Brendan Kellams
+Copyright 2017 UCSD Coding Bootcamp - Brendan Kellams
 
