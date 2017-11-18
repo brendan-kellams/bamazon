@@ -32,13 +32,13 @@ Finally, after you have entered in a quantity that is available for purchase, th
 #### Contributors:
 ***
 
-Brendan Kellams [GitHub] (https://github.com/brendan-kellams)
+Brendan Kellams [GitHub](https://github.com/brendan-kellams)
 
 #### Special Thanks:
 ***
 
-* Chris Stead [GitHub] (https://github.com/cmstead)
-* Ryan Hansen [GitHub] (https://github.com/rphansen91)
+* Chris Stead [GitHub](https://github.com/cmstead)
+* Ryan Hansen [GitHub](https://github.com/rphansen91)
 * Greg Lee
 
 
@@ -49,9 +49,9 @@ Brendan Kellams [GitHub] (https://github.com/brendan-kellams)
 * Node.JS
 * Javascript
 * npm packages:
-	-[mysql] (https://www.npmjs.com/package/mysql)
-	-[inquirer] (https://www.npmjs.com/package/inquirer)
-	-[cli-table] (https://www.npmjs.com/package/cli-table)
+	-[mysql](https://www.npmjs.com/package/mysql)
+	-[inquirer](https://www.npmjs.com/package/inquirer)
+	-[cli-table](https://www.npmjs.com/package/cli-table)
 
 #### Future Enhancements:
 ***
