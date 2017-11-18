@@ -1,7 +1,9 @@
+// npm packages
 var inquirer = require('inquirer');
 var mySQL = require('mysql');
-var Table = require('cli-table')
+var Table = require('cli-table');
 
+// connection with the MySQL server
 var connection = mySQL.createConnection({
     host: "127.0.0.1",
     port: 3306,
@@ -10,10 +12,12 @@ var connection = mySQL.createConnection({
     database: "bamazon_db"
 });
 
+// product array where the selected items go
 var productPurchased = [];
 
 connection.connect();
 
+// grabbing the specific information from the products and putting them into the table
 connection.query('SELECT item_id, product_name, price FROM products', function (err, result) {
     if (err) {
         console.log(err);
@@ -32,11 +36,12 @@ connection.query('SELECT item_id, product_name, price FROM products', function (
     }
     console.log(table.toString());
 
-    buy(result);
+    buy();
 
 });
 
-function buy(result) {
+// the prompt that asks the questions, grabs the specific item, and gives the total cost
+function buy() {
     inquirer.prompt([
         {
             type: "input",
@@ -48,11 +53,11 @@ function buy(result) {
             message: "How many would you like to buy? ",
         }
     ]).then(function (answers) {
-        var item = (answers.id) - 1;
+        var item = (answers.id);
         var qty = parseInt(answers.quantity);
-        
 
-        connection.query('SELECT * FROM products WHERE item_id=?', { item_id: item }, function (err, data) {
+        // searching for the requested item
+        connection.query('SELECT * FROM products WHERE item_id=?', item, function (err, data) {
             if (err) throw err;
 
             if (data.length === 0) {
@@ -61,17 +66,23 @@ function buy(result) {
                 var productData = data[0];
 
                 if (qty <= productData.stock_quantity) {
-                    console.log("Great! placing your item in your cart.")
+                    console.log("Great! placing your items in your cart.")
 
+                    // grabbing the specific item
                     connection.query('UPDATE products SET stock_quantity = ' +
                         (productData.stock_quantity - qty) + ' WHERE item_id= ' + item, function (err, data) {
                             if (err) throw err;
 
-                            var total = parseFloat(((result[item].price) * qty).toFixed(2));
-                            console.log('Your order has been placed! Your total is $' + total);
+                            var total = parseFloat(((productData.price) * qty).toFixed(2));
+
+                            console.log('');
+                            console.log('Your order has been placed!');
+                            console.log('You have ordered ' + qty + ' items of the ' +
+                                productData.product_name + '.');
+                            console.log('Your total is $' + total);
                             console.log('Thank you and come again!');
 
-                            connnection.end();
+                            connection.end();
                         });
 
                 } else {
