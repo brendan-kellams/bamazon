@@ -49,9 +49,9 @@ Brendan Kellams [GitHub](https://github.com/brendan-kellams)
 * Node.JS
 * Javascript
 * npm packages:
-	-[mysql](https://www.npmjs.com/package/mysql)
-	-[inquirer](https://www.npmjs.com/package/inquirer)
-	-[cli-table](https://www.npmjs.com/package/cli-table)
+	- [mysql](https://www.npmjs.com/package/mysql)
+	- [inquirer](https://www.npmjs.com/package/inquirer)
+	- [cli-table](https://www.npmjs.com/package/cli-table)
 
 #### Future Enhancements:
 ***
