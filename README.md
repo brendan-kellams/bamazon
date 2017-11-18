@@ -37,9 +37,9 @@ Brendan Kellams [GitHub] (https://github.com/brendan-kellams)
 #### Special Thanks:
 ***
 
-*Chris Stead [GitHub] (https://github.com/cmstead)
-*Ryan Hansen [GitHub] (https://github.com/rphansen91)
-*Greg Lee
+* Chris Stead [GitHub] (https://github.com/cmstead)
+* Ryan Hansen [GitHub] (https://github.com/rphansen91)
+* Greg Lee
 
 
 #### Technologies Used:
