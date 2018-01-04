@@ -1,3 +1,5 @@
+// import { connect } from 'http2';
+
 // npm packages
 var inquirer = require('inquirer');
 var mySQL = require('mysql');
@@ -15,84 +17,82 @@ var connection = mySQL.createConnection({
 // product array where the selected items go
 var productPurchased = [];
 
-connection.connect();
-
-// grabbing the specific information from the products and putting them into the table
-connection.query('SELECT item_id, product_name, price FROM products', function (err, result) {
-    if (err) {
-        console.log(err);
-    }
-    var table = new Table({
-        head: ['Item #', 'Product Name', 'Price'],
-        style: {
-            head: ['grey']
-        }
-    });
-    for (var i = 0; i < result.length; i++) {
-
-        table.push(
-            [result[i].item_id, result[i].product_name, result[i].price]
-        );
-    }
-    console.log(table.toString());
-
-    buy();
-
+connection.connect(function (err) {
+    if (err) throw err;
+    console.log("connection successful!");
+    makeTable();
 });
 
-// the prompt that asks the questions, grabs the specific item, and gives the total cost
-function buy() {
-    inquirer.prompt([
-        {
-            type: "input",
-            name: "id",
-            message: "Please enter the item number you would like to purchase:",
-        }, {
-            type: "input",
-            name: "quantity",
-            message: "How many would you like to buy? ",
+var makeTable = function() {
+    connection.query('SELECT item_id, product_name, department_name, price, stock_quantity FROM products', function (err, res) {
+        if (err) {
+            console.log(err);
         }
-    ]).then(function (answers) {
-        var item = (answers.id);
-        var qty = parseInt(answers.quantity);
-
-        // searching for the requested item
-        connection.query('SELECT * FROM products WHERE item_id=?', item, function (err, data) {
-            if (err) throw err;
-
-            if (data.length === 0) {
-                console.log("I'm sorry, please enter a valid item ID.");
-            } else {
-                var productData = data[0];
-
-                if (qty <= productData.stock_quantity) {
-                    console.log("Great! placing your items in your cart.")
-
-                    // grabbing the specific item
-                    connection.query('UPDATE products SET stock_quantity = ' +
-                        (productData.stock_quantity - qty) + ' WHERE item_id= ' + item, function (err, data) {
-                            if (err) throw err;
-
-                            var total = parseFloat(((productData.price) * qty).toFixed(2));
-
-                            console.log('');
-                            console.log('Your order has been placed!');
-                            console.log('You have ordered ' + qty + ' items of the ' +
-                                productData.product_name + '.');
-                            console.log('Your total is $' + total);
-                            console.log('Thank you and come again!');
-
-                            connection.end();
-                        });
-
-                } else {
-                    console.log('Sorry, we do not have enough in stock of this product. Your order could not be be placed.');
-                    console.log('Please modify your order.');
-
-                }
+        var table = new Table({
+            head: ['Item #', 'Product Name', 'Department', 'Price', 'Quantity'],
+            style: {
+                head: ['grey']
             }
         });
+        for (var i = 0; i < res.length; i++) {
+            table.push(
+                [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]
+            );
+        }
+        console.log(table.toString());
 
-
+        buy(res);
     });
 }
+
+// grabbing the specific information from the products and putting them into the table
+// the prompt that asks the questions, grabs the specific item, and gives the total cost
+function buy(res) {
+    inquirer.prompt([{
+        type: "input",
+        name: "productID",
+        message: "Please enter the item number you would like to purchase:"
+    }]).then(function (answer) {
+        var correct = false;
+        for (var i = 0; i < res.length; i++) {
+            if (res[i].item_id == answer.productID) {
+                correct = true;
+                var product = answer.productID;
+                var id = i;
+                inquirer.prompt({
+                    type: "input",
+                    name: "quantity",
+                    message: "How many would you like to buy? ",
+                    validate: function (value) {
+                        if (isNaN(value) == false) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }).then(function (answer) {
+                    var qty = parseInt(answer.quantity);
+                    if ((res[id].stock_quantity - qty) > 0) {
+                        connection.query("UPDATE products SET stock_quantity ='" +
+                            (res[id].stock_quantity - answer.quantity) + "' WHERE item_id = '" +
+                            product + "'", function (err, res2) {
+                                console.log("Product Purchase Complete!");
+
+                                var total = parseFloat(((res[id].price) * qty).toFixed(2));
+                                console.log('Your order has been placed!');
+                                console.log('You have ordered ' + qty + ' items of the ' +
+                                    res[id].product_name + '.');
+                                console.log('Your total is $' + total);
+                                console.log('Thank you and come again!');
+                                makeTable();
+                            })
+                    } else {
+                        console.log('Sorry, we do not have enough in stock of this product. Your order could not be be placed.');
+                        console.log('Please modify your order.');
+                        buy(res);
+                    }
+                })
+            }
+        }
+    });
+};

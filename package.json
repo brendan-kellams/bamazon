@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/brendan-kellams/bamazon/issues"
   },
-  "homepage": "https://github.com/brendan-kellams/bamazon#readme"
+  "homepage": "https://github.com/brendan-kellams/bamazon#readme",
+  "dependencies": {
+    "cli-table": "^0.3.1",
+    "inquirer": "^4.0.2",
+    "mysql": "^2.15.0"
+  }
 }
