@@ -55,7 +55,7 @@ Brendan Kellams [GitHub](https://github.com/brendan-kellams)
 
 #### Future Enhancements:
 ***
-This project had more challenging features offered but this application in its current state is the minimum requirement for the assignment.  I plan to further develop this application with the more challenging aspects that were originally assigned with this assignment.
+In the bamazonManager.js code, I would like to add a "substract quantity" function and add more colors to the display in the node interface.
 
 
 
