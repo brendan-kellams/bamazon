@@ -1,5 +1,3 @@
-// import { connect } from 'http2';
-
 // npm packages
 var inquirer = require('inquirer');
 var mySQL = require('mysql');
@@ -17,12 +15,14 @@ var connection = mySQL.createConnection({
 // product array where the selected items go
 var productPurchased = [];
 
+// starting connection
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connection successful!");
     makeTable();
 });
 
+// formatting the table
 var makeTable = function() {
     connection.query('SELECT item_id, product_name, department_name, price, stock_quantity FROM products', function (err, res) {
         if (err) {
@@ -43,27 +43,31 @@ var makeTable = function() {
 
         buy(res);
     });
-}
+};
 
-// grabbing the specific information from the products and putting them into the table
-// the prompt that asks the questions, grabs the specific item, and gives the total cost
+// this function prompts the user which item they would like and what quantity of that item they would like.
+// it substracts the quantity purchased from the product database, displays the total, and applies that total to the product sales in the department database 
 function buy(res) {
+    // the prompt asking which item they would like to purchase.  The user has to provide the item id #
     inquirer.prompt([{
         type: "input",
         name: "productID",
         message: "Please enter the item number you would like to purchase:"
     }]).then(function (answer) {
+        // checking if the item id given by the user is correct
         var correct = false;
         for (var i = 0; i < res.length; i++) {
             if (res[i].item_id == answer.productID) {
                 correct = true;
                 var product = answer.productID;
                 var id = i;
+                // once it's confirmed that is correct, another prompt asks how many the user would like to buy
                 inquirer.prompt({
                     type: "input",
                     name: "quantity",
                     message: "How many would you like to buy? ",
                     validate: function (value) {
+                        // checking if the quantity given is a number
                         if (isNaN(value) == false) {
                             return true;
                         } else {
@@ -71,11 +75,18 @@ function buy(res) {
                         }
                     }
                 }).then(function (answer) {
+                    // substracting the quantity purchased from the product database
                     var qty = parseInt(answer.quantity);
                     if ((res[id].stock_quantity - qty) > 0) {
                         connection.query("UPDATE products SET stock_quantity ='" +
                             (res[id].stock_quantity - answer.quantity) + "' WHERE item_id = '" +
                             product + "'", function (err, res2) {
+                                // adding the total from the purchase to the product sales in the department database
+                                connection.query("UPDATE departments SET product_sales= product_sales+"+
+                                (answer.quantity*res[id].price)+", total_sales=product_sales-overheadcosts WHERE department_name='"+
+                                res[id].department_name+"';", function(err,res3) {
+                                    console.log("Sales Added to Department!");
+                                });
                                 console.log("Product Purchase Complete!");
 
                                 var total = parseFloat(((res[id].price) * qty).toFixed(2));
